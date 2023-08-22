@@ -76,6 +76,11 @@
   padding: 20px;
   color: white;
   cursor: pointer;
+  transition: all 1ms;
+}
+
+.task:hover {
+  opacity: 0.8;
 }
 
 .taskCompleted {

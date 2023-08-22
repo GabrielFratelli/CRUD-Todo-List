@@ -25,10 +25,10 @@ Para rodar este projeto é necessário ter instalado na sua máquina as seguinte
 
 ## Para rodar o projeto
 
-1. Instale as dependências: `yarn`
-2. Startar a aplicação: `yarn dev`
-3. Escolher o emulador da sua preferência.
-4. Em outro terminal de sua preferência rode a api: `npm run json-server`
+1. Escolher o emulador da sua preferência.
+2. Instale as dependências: `yarn`
+3. Startar a aplicação: `yarn dev`
+4. Em outro terminal rode a api: `npm run json-server`
 
 ## 📷 Resultado
 

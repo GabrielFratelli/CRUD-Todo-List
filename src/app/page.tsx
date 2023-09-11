@@ -4,16 +4,18 @@ import useGetTaskList from "@/service/http/useGetTaskList"; // Importa um hook p
 import styles from "./page.module.css";
 import axios from "axios";
 import useDeleteTaskList from "@/service/http/useDeleteTaskList";
+import useCreateTaskList from "@/service/http/useCreateTaskList";
 
 export default function Home() {
   const [newTaskName, setNewTaskName] = useState(""); // Estado para armazenar o nome da nova tarefa
   const { data, called, loading, error, getTask } = useGetTaskList(); // Utiliza o hook personalizado para obter dados de tarefas
-  const { deleteTask, called: deleteCalled } = useDeleteTaskList();
+  const { deleteTask, called: deleteCalled } = useDeleteTaskList(); // Utiliza o hook personalizado para deletar dados de tarefas
+  const { createTask, called: createCalled } = useCreateTaskList(); // Utiliza o hook personalizado para criar dados de tarefas
 
   useEffect(() => {
     getTask(); // Chama a função para obter os dados de tarefas ao montar o componente
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [deleteCalled]);
+  }, [deleteCalled, createCalled]);
 
   if (loading) {
     return (

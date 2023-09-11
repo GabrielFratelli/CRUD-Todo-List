@@ -11,7 +11,7 @@ const useGetTaskList = () => {
         called: false,
         loading: true,
       });
-      // linha 15 a 18 é a conexão com API
+      // a const response é a conexão com API
       const response = await RemoteService.request<ResultProps[]>({
         method: "GET",
         resource: "tasks",

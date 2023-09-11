@@ -1,17 +1,13 @@
 import { useCallback } from "react";
 import { RemoteService } from "../RemoteService";
 import { ResultProps, Variables } from "./types";
-import { useDeleteTaskAtom } from "@/hooks/useDeleteTask";
+import { useCreateTaskAtom } from "@/hooks/useCreateTask";
 
-const useDeleteTaskList = () => {
-  const { deleteTaskAtom, setDeleteTaskAtom } = useDeleteTaskAtom();
-  const deleteTask = useCallback(async ({ idTask }: Variables) => {
+const useCreateTaskList = () => {
+  const { createTaskAtom, setCreateTaskAtom } = useCreateTaskAtom();
+  const createTask = useCallback(async ({ id, value, result }: Variables) => {
     try {
-      const variables = {
-        idTask,
-      };
-
-      setDeleteTaskAtom({
+      setCreateTaskAtom({
         data: undefined,
         called: false,
         loading: true,
@@ -20,18 +16,23 @@ const useDeleteTaskList = () => {
 
       // a const response é a conexão com API
       const response = await RemoteService.request<ResultProps>({
-        method: "DELETE",
-        resource: `tasks/${variables.idTask}`,
+        method: "POST",
+        resource: "tasks",
+        body: {
+          id: id,
+          value: value,
+          result: result,
+        },
       });
 
-      setDeleteTaskAtom({
+      setCreateTaskAtom({
         data: response.data,
         called: true,
         loading: false,
       });
     } catch (err) {
       const error = err as any;
-      setDeleteTaskAtom({
+      setCreateTaskAtom({
         called: true,
         loading: false,
         error: error.message,
@@ -40,10 +41,10 @@ const useDeleteTaskList = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const { data, called, loading, error } = deleteTaskAtom;
+  const { data, called, loading, error } = createTaskAtom;
 
   return {
-    deleteTask,
+    createTask,
     data,
     called,
     loading,
@@ -51,4 +52,4 @@ const useDeleteTaskList = () => {
   };
 };
 
-export default useDeleteTaskList;
+export default useCreateTaskList;

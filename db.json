@@ -1,9 +1,8 @@
 {
   "tasks": [
     {
-      "id": 1,
-      "value": "oi",
-      "result": false
+      "value": "Exemplo",
+      "id": 1
     }
   ]
 }

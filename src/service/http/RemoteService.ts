@@ -58,6 +58,12 @@ export class RemoteService {
         } catch (err) {
           throw new Error(JSON.stringify((err as AxiosError).response));
         }
+      case "DELETE":
+        try {
+          return await api.delete<T>(resource);
+        } catch (err) {
+          throw new Error(JSON.stringify((err as AxiosError).response));
+        }
     }
   }
 }

@@ -13,7 +13,7 @@ interface taskAtom {
   error?: string;
 }
 
-export const taskList = atom<taskAtom>({
+export const getTaskList = atom<taskAtom>({
   data: undefined,
   called: false,
   loading: false,

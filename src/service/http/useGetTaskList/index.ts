@@ -1,11 +1,11 @@
-import { useTaskAtom } from "@/hooks/useTask";
+import { useGetTaskAtom } from "@/hooks/useGetTask";
 import { useCallback } from "react";
 import { RemoteService } from "../RemoteService";
 import { ResultProps } from "./types";
 
-const useGetTodo = () => {
-  const { taskAtom, setTaskAtom } = useTaskAtom();
-  const getTodo = useCallback(async () => {
+const useGetTaskList = () => {
+  const { taskAtom, setTaskAtom } = useGetTaskAtom();
+  const getTask = useCallback(async () => {
     try {
       setTaskAtom({
         called: false,
@@ -44,7 +44,7 @@ const useGetTodo = () => {
   const { data, called, loading, error } = taskAtom;
 
   return {
-    getTodo,
+    getTask,
     data,
     called,
     loading,
@@ -52,4 +52,4 @@ const useGetTodo = () => {
   };
 };
 
-export default useGetTodo;
+export default useGetTaskList;

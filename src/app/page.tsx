@@ -1,24 +1,32 @@
 "use client";
 import { useState, useEffect } from "react";
-import useGetTodo from "@/service/http/useGetTodo"; // Importa um hook personalizado para obter dados de tarefas
+import useGetTaskList from "@/service/http/useGetTaskList"; // Importa um hook personalizado para obter dados de tarefas
 import styles from "./page.module.css";
 import axios from "axios";
+import useDeleteTaskList from "@/service/http/useDeleteTaskList";
 
 export default function Home() {
   const [newTaskName, setNewTaskName] = useState(""); // Estado para armazenar o nome da nova tarefa
-  const { data, called, loading, error, getTodo } = useGetTodo(); // Utiliza o hook personalizado para obter dados de tarefas
+  const { data, called, loading, error, getTask } = useGetTaskList(); // Utiliza o hook personalizado para obter dados de tarefas
+  const { deleteTask, called: deleteCalled } = useDeleteTaskList();
 
   useEffect(() => {
-    getTodo(); // Chama a função para obter os dados de tarefas ao montar o componente
+    getTask(); // Chama a função para obter os dados de tarefas ao montar o componente
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  }, [deleteCalled]);
 
   if (loading) {
-    return <p>Carregando...</p>; // Renderiza uma mensagem de carregamento se os dados estiverem sendo carregados
+    return (
+      <p style={{ textAlign: "center", fontSize: "22px" }}>Carregando...</p>
+    ); // Renderiza uma mensagem de carregamento se os dados estiverem sendo carregados
   }
 
   if (error) {
-    return <p>Ocorreu um erro ao carregar os dados.</p>; // Renderiza uma mensagem de erro se ocorrer um erro ao carregar os dados
+    return (
+      <p style={{ textAlign: "center", fontSize: "22px" }}>
+        Ocorreu um erro ao carregar os dados.
+      </p>
+    ); // Renderiza uma mensagem de erro se ocorrer um erro ao carregar os dados
   }
 
   const handleAddTask = async () => {
@@ -35,11 +43,10 @@ export default function Home() {
         value: newTaskName,
       });
 
-      // Atualizar o estado para exibir a nova tarefa
-      setNewTaskName("");
-      getTodo(); // Recarregar a lista de tarefas após adicionar uma nova tarefa
+      setNewTaskName(""); // Atualizar o estado para exibir a nova tarefa
+      getTask(); // Recarregar a lista de tarefas após adicionar uma nova tarefa
     } catch (error) {
-      <p>Erro ao adicionar a tarefa</p>; // Mostra um erro se houver um problema ao adicionar uma tarefa
+      alert("Ops! erro ao adicionar tarefa."); // Mostra um erro se houver um problema ao adicionar uma tarefa
     }
   };
 
@@ -48,8 +55,7 @@ export default function Home() {
       const updatedTask = data?.find((task) => task.id === id); // Nesta linha serve para verificar se data não é undefined. Se data não for undefined, a função find é chamada para procurar a tarefa correspondente pelo id nas tarefas.
 
       if (updatedTask) {
-        // Inverte o valor de result para concluído ou incompleto
-        const updatedResult = !updatedTask.result;
+        const updatedResult = !updatedTask.result; // Inverte o valor de result para concluído ou incompleto
 
         // Atualiza a tarefa no servidor com o novo valor de result
         await axios.put(`http://localhost:5000/tasks/${id}`, {
@@ -57,23 +63,18 @@ export default function Home() {
           result: updatedResult,
         });
 
-        // Recarrega a lista de tarefas após a atualização
-        getTodo();
+        getTask(); // Recarrega a lista de tarefas após a atualização
       }
     } catch (error) {
-      <p>Erro ao concluir a tarefa</p>; // Mostra um erro se houver um problema ao adicionar uma tarefa
+      alert("Ops! erro ao concluir tarefa."); // Mostra um erro se houver um problema ao adicionar uma tarefa
     }
   };
 
   const handleRemoveTask = async (id: number) => {
     try {
-      // Deletar a tarefa da API usando o método DELETE
-      await axios.delete(`http://localhost:5000/tasks/${id}`);
-
-      // Recarregar a lista de tarefas após remover uma tarefa
-      getTodo();
+      deleteTask({ idTask: id });
     } catch (error) {
-      <p>Erro ao remover a tarefa</p>; // Mostra um erro se houver um problema ao remover uma tarefa
+      alert("Ops! erro ao remover tarefa."); // Mostra um erro se houver um problema ao remover uma tarefa
     }
   };
 
